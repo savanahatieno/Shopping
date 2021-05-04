@@ -52,6 +52,7 @@ public class Items {
         if (!(o instanceof Items)) return false;
         Items items = (Items) o;
         return id == items.id &&
+                price == items.price &&
                 storeId == items.storeId &&
                 Objects.equals(name, items.name);
     }
