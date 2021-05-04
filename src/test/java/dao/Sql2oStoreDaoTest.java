@@ -1,11 +1,14 @@
 package dao;
 
+import models.Items;
 import models.Store;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
@@ -58,9 +61,33 @@ public class Sql2oStoreDaoTest {
         assertEquals(0,storeDao.getAll().size());
     }
 
+    @Test
+    public void storesReturnItemsCorrecty() throws Exception {
+        Items testItem = setUpItems();
+        itemsDao.add(testItem);
+
+        Items testItem2 = setUpItems();
+        itemsDao.add(testItem2);
+
+        Store testStore = setUpStore();
+        storeDao.add(testStore);
+        storeDao.addStoreToItem(testStore, testItem);
+        storeDao.addStoreToItem(testStore,testItem2);
+
+        Items[] items ={testItem, testItem2};
+
+        assertEquals(Arrays.asList(items),storeDao.getAllItemsByStore(testStore.getId()));
+    }
+
     public Store setUpStore() {
         Store store =  new Store("Naivas", "Syokimau", "www.naivas.com");
         storeDao.add(store);
         return store;
+    }
+
+    public Items setUpItems() {
+        Items item = new Items("Bread", 50, 1);
+        itemsDao.add(item);
+        return item;
     }
 }
