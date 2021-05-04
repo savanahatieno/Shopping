@@ -78,9 +78,13 @@ public class Sql2oItemsDao implements ItemsDao {
     @Override
     public void deleteById(int id) {
         String sql = "DELETE from items WHERE id = :id";
+        String deleteJoin = "DELETE from stores_items WHERE itemid = :itemId";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
+                    .executeUpdate();
+            con.createQuery(deleteJoin)
+                    .addParameter("itemId", id)
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);

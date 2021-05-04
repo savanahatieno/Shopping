@@ -101,9 +101,13 @@ public class Sql2oStoreDao implements StoreDao {
     @Override
     public void deleteById(int id) {
         String sql = "DELETE from stores WHERE id = :id";
+        String deleteJoin = "DELETE from stores_items WHERE storeid = :storeId";
         try(Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
+                    .executeUpdate();
+            con.createQuery(deleteJoin)
+                    .addParameter("storeId",id)
                     .executeUpdate();
         }catch(Sql2oException ex){
             System.out.println(ex);
