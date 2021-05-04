@@ -1,6 +1,7 @@
 package dao;
 
 import models.Items;
+import models.Store;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,16 +39,16 @@ public class Sql2oItemsDaoTest {
     public void getAll() {
         Items item1 = setUpItems();
         Items item2 = setUpItems();
-        assertEquals(2,itemsDao.getAll().size());
+        assertEquals(2, itemsDao.getAll().size());
     }
 
     @Test
-    public void deleteById(){
+    public void deleteById() {
         Items testItem = setUpItems();
         Items otherItem = setUpItems();
         assertEquals(2, itemsDao.getAll().size());
         itemsDao.deleteById(testItem.getId());
-        assertEquals(1,itemsDao.getAll().size());
+        assertEquals(1, itemsDao.getAll().size());
     }
 
     @Test
@@ -55,13 +56,37 @@ public class Sql2oItemsDaoTest {
         Items item = setUpItems();
         Items other = setUpItems();
         itemsDao.clearAll();
-        assertEquals(0,itemsDao.getAll().size());
+        assertEquals(0, itemsDao.getAll().size());
+    }
+
+    @Test
+    public void addItemsToStoreAddsItemsCorrectly() throws Exception {
+        Store testStore = setUpStore();
+        Store altStore = setUpStore();
+
+        storeDao.add(testStore);
+        storeDao.add(altStore);
+
+        Items testItems = setUpItems();
+
+        itemsDao.add(testItems);
+
+        itemsDao.addItemToStore(testItems, testStore);
+        itemsDao.addItemToStore(testItems, altStore);
+
+        assertEquals(2, itemsDao.getAllStoresForItem(testItems.getId()).size());
     }
 
     public Items setUpItems() {
         Items item = new Items("Bread", 50, 1);
         itemsDao.add(item);
         return item;
+    }
+
+    public Store setUpStore() {
+        Store store = new Store("Naivas", "Syokimau", "www.naivas.com");
+        storeDao.add(store);
+        return store;
     }
 
 }
