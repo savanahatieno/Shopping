@@ -8,16 +8,17 @@ import java.util.List;
 public interface ItemsDao {
 
     //create
-    void add (Items item);
-//    void addItemToStore(Items item, Store store);
+    void add(Items item);
+    void addItemToStore(Items item, Store store);
 
     //read
     List<Items> getAll();
-    List<Items> getAllItemsByStore(int StoreId);
+    List<Store> getAllStoresForItem(int id);
 
     //update
 
     //delete
     void deleteById(int id);
+
     void clearAll();
 }
