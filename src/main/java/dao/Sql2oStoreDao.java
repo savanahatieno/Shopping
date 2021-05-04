@@ -1,10 +1,12 @@
 package dao;
 
+import models.Items;
 import models.Store;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sql2oStoreDao implements StoreDao {
@@ -29,6 +31,19 @@ public class Sql2oStoreDao implements StoreDao {
     }
 
     @Override
+    public void addStoreToItem(Store store, Items item) {
+        String sql = "INSERT INTO stores_items (storeid, itemid) VALUES (:storeId, :itemId)";
+        try(Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("storeId",store.getId())
+                    .addParameter("itemId", item.getId())
+                    .executeUpdate();
+        }catch(Sql2oException ex){
+            System.out.println(ex);
+        }
+    }
+
+    @Override
     public List<Store> getAll() {
         try (Connection con = sql2o.open()) {
             return con.createQuery("SELECT *FROM stores")
@@ -43,6 +58,29 @@ public class Sql2oStoreDao implements StoreDao {
                     .addParameter("id", id)
                     .executeAndFetchFirst(Store.class);
         }
+    }
+
+    @Override
+    public List<Items> getAllItemsByStore(int storeId) {
+        ArrayList<Items> items = new ArrayList<>();
+
+        String joinQuery = "SELECT itemid FROM stores_items WHERE storeid = :storeId";
+
+        try(Connection con = sql2o.open()) {
+            List<Integer> allItemsIds = con.createQuery(joinQuery)
+                    .addParameter("storeId", storeId)
+                    .executeAndFetch(Integer.class);
+            for(Integer itemId : allItemsIds) {
+                String itemQuery = "SELECT * FROM items WHERE id = :itemId";
+                items.add(
+                        con.createQuery(itemQuery)
+                        .addParameter("itemId",itemId)
+                        .executeAndFetchFirst(Items.class));
+            }
+        }catch(Sql2oException ex){
+            System.out.println(ex);
+        }
+        return items;
     }
 
     @Override
