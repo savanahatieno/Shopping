@@ -16,7 +16,7 @@ public class Sql2oItemsDao implements ItemsDao {
 
     @Override
     public void add(Items item) {
-        String sql = "INSERT INTO items (name, storeid) VALUES(:name, :storeid)";
+        String sql = "INSERT INTO items (name, price, storeid) VALUES (:name, :price, :storeId)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(item)
