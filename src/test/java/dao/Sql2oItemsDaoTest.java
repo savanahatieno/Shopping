@@ -77,8 +77,27 @@ public class Sql2oItemsDaoTest {
         assertEquals(2, itemsDao.getAllStoresForItem(testItems.getId()).size());
     }
 
+    @Test
+    public void deletingStoreAlsoUpdatesJoinTable()throws Exception {
+        Items testItem = setUpItems();
+        itemsDao.add(testItem);
+
+        Store testStore = setUpStore();
+        storeDao.add(testStore);
+
+        Store altStore = setUpStore();
+        storeDao.add(testStore);
+
+        storeDao.addStoreToItem(testStore,testItem);
+        storeDao.addStoreToItem(altStore,testItem);
+
+        storeDao.deleteById(testStore.getId());
+        assertEquals(0, storeDao.getAllItemsByStore(testStore.getId()).size());
+
+    }
+
     public Items setUpItems() {
-        Items item = new Items("Bread", 50, 1);
+        Items item = new Items("Bread", 50);
         itemsDao.add(item);
         return item;
     }

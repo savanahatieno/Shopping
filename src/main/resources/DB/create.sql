@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS items
 (
     id      int PRIMARY KEY auto_increment,
     name    VARCHAR,
-    price   INTEGER,
-    storeid INTEGER
+    price   INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS stores_items

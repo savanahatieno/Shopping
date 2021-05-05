@@ -18,7 +18,7 @@ public class Sql2oItemsDao implements ItemsDao {
 
     @Override
     public void add(Items item) {
-        String sql = "INSERT INTO items (name, price, storeid) VALUES (:name, :price, :storeId)";
+        String sql = "INSERT INTO items (name, price) VALUES (:name, :price)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(item)
@@ -76,11 +76,24 @@ public class Sql2oItemsDao implements ItemsDao {
     }
 
     @Override
+    public Items findById(int id) {
+        try(Connection con = sql2o.open()){
+            return con.createQuery("SELECT * FROM items WHERE id =:id")
+                    .addParameter("id",id)
+                    .executeAndFetchFirst(Items.class);
+        }
+    }
+
+    @Override
     public void deleteById(int id) {
         String sql = "DELETE from items WHERE id = :id";
+        String deleteJoin = "DELETE from stores_items WHERE itemid = :itemId";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
+                    .executeUpdate();
+            con.createQuery(deleteJoin)
+                    .addParameter("itemId", id)
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);

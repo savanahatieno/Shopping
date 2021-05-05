@@ -29,24 +29,12 @@ public class ItemsTest {
     }
 
     @Test
-    public void getStoreId() {
-        Items testItems = setUpItems();
-        assertEquals(1,testItems.getStoreId());
-    }
-
-    @Test
     public void setName() {
         Items testItems = setUpItems();
         testItems.setName("Eggs");
         assertNotEquals("Bread",testItems.getName());
     }
 
-    @Test
-    public void setSoreId() {
-        Items testItems = setUpItems();
-        testItems.setStoreId(2);
-        assertNotEquals(1,testItems.getStoreId());
-    }
 
     @Test
     public void setPrice() {
@@ -63,6 +51,6 @@ public class ItemsTest {
     }
 
     public Items setUpItems(){
-        return new Items("Bread",50,1);
+        return new Items("Bread",50);
     }
 }

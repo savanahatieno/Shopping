@@ -62,7 +62,7 @@ public class Sql2oStoreDaoTest {
     }
 
     @Test
-    public void storesReturnItemsCorrecty() throws Exception {
+    public void storesReturnItemsCorrectly() throws Exception {
         Items testItem = setUpItems();
         itemsDao.add(testItem);
 
@@ -79,6 +79,24 @@ public class Sql2oStoreDaoTest {
         assertEquals(Arrays.asList(items),storeDao.getAllItemsByStore(testStore.getId()));
     }
 
+    @Test
+    public void deletingItemsAlsoUpdatesJoinTable() {
+        Store testStore = setUpStore();
+        storeDao.add(testStore);
+
+        Items testItem = setUpItems();
+        itemsDao.add(testItem);
+
+        Items altItem = setUpItems();
+        itemsDao.add(altItem);
+
+        itemsDao.addItemToStore(testItem,testStore);
+        itemsDao.addItemToStore(altItem,testStore);
+
+        storeDao.deleteById(testItem.getId());
+        assertEquals(0, itemsDao.getAllStoresForItem(testItem.getId()).size());
+    }
+
     public Store setUpStore() {
         Store store =  new Store("Naivas", "Syokimau", "www.naivas.com");
         storeDao.add(store);
@@ -86,7 +104,7 @@ public class Sql2oStoreDaoTest {
     }
 
     public Items setUpItems() {
-        Items item = new Items("Bread", 50, 1);
+        Items item = new Items("Bread", 50);
         itemsDao.add(item);
         return item;
     }
