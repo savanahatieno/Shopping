@@ -18,7 +18,7 @@ public class Sql2oItemsDao implements ItemsDao {
 
     @Override
     public void add(Items item) {
-        String sql = "INSERT INTO items (name, price, storeid) VALUES (:name, :price, :storeId)";
+        String sql = "INSERT INTO items (name, price) VALUES (:name, :price)";
         try (Connection con = sql2o.open()) {
             int id = (int) con.createQuery(sql, true)
                     .bind(item)
@@ -73,6 +73,15 @@ public class Sql2oItemsDao implements ItemsDao {
             System.out.println(ex);
         }
         return stores;
+    }
+
+    @Override
+    public Items findById(int id) {
+        try(Connection con = sql2o.open()){
+            return con.createQuery("SELECT * FROM items WHERE id =:id")
+                    .addParameter("id",id)
+                    .executeAndFetchFirst(Items.class);
+        }
     }
 
     @Override

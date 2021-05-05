@@ -62,7 +62,7 @@ public class Sql2oStoreDaoTest {
     }
 
     @Test
-    public void storesReturnItemsCorrecty() throws Exception {
+    public void storesReturnItemsCorrectly() throws Exception {
         Items testItem = setUpItems();
         itemsDao.add(testItem);
 
@@ -104,7 +104,7 @@ public class Sql2oStoreDaoTest {
     }
 
     public Items setUpItems() {
-        Items item = new Items("Bread", 50, 1);
+        Items item = new Items("Bread", 50);
         itemsDao.add(item);
         return item;
     }

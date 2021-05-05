@@ -6,12 +6,10 @@ public class Items {
     private int id;
     private String name;
     private int price;
-    private int storeId;
 
-    public Items(String name, int price, int storeId) {
+    public Items(String name, int price) {
         this.name = name;
         this.price = price;
-        this.storeId = storeId;
     }
 
     public int getId() {
@@ -38,13 +36,6 @@ public class Items {
         this.price = price;
     }
 
-    public int getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storeId = storeId;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -53,13 +44,12 @@ public class Items {
         Items items = (Items) o;
         return id == items.id &&
                 price == items.price &&
-                storeId == items.storeId &&
                 Objects.equals(name, items.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name,id,storeId);
+        return Objects.hash(name,id);
     }
 }
 

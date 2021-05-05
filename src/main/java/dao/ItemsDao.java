@@ -14,6 +14,7 @@ public interface ItemsDao {
     //read
     List<Items> getAll();
     List<Store> getAllStoresForItem(int id);
+    Items findById(int id);
 
     //update
 
