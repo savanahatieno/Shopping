@@ -37,6 +37,12 @@ public class App {
             res.status(201);
             return gson.toJson(store);
         });
+        post("/items/new", "application/json", (req, res) -> {
+            Items item = gson.fromJson(req.body(), Items.class);
+            itemDao.add(item);
+            res.status(201);
+            return gson.toJson(item);
+        });
 
 
     }
