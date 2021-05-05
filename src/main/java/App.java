@@ -30,6 +30,14 @@ public class App {
         itemDao = new Sql2oItemsDao(sql2o);
         conn = sql2o.open();
 
+        //CREATE
+        post("/stores/new", "application/json", (req, res) -> {
+            Store store = gson.fromJson(req.body(), Store.class);
+            storeDao.add(store);
+            res.status(201);
+            return gson.toJson(store);
+        });
+
 
     }
 }
