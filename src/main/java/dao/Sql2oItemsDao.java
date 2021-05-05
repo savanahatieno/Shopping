@@ -25,6 +25,11 @@ public class Sql2oItemsDao implements ItemsDao {
                     .executeUpdate()
                     .getKey();
             item.setId(id);
+            String joinQuery = "INSERT INTO stores_items (storeid, itemid) VALUES (:storeId, :itemId)";
+                con.createQuery(joinQuery)
+                        .addParameter("storeId", item.getStoreId())
+                        .addParameter("itemId", item.getId())
+                        .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
         }

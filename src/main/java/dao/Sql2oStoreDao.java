@@ -59,6 +59,13 @@ public class Sql2oStoreDao implements StoreDao {
                     .executeAndFetchFirst(Store.class);
         }
     }
+    public Store findItemByStoreId(int id) {
+        try (Connection con = sql2o.open()) {
+            return con.createQuery("SELECT * FROM stores WHERE id =:id")
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Store.class);
+        }
+    }
 
     @Override
     public List<Items> getAllItemsByStore(int storeId) {
