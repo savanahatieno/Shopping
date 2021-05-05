@@ -62,6 +62,16 @@ public class App {
             }
         });
 
+        exception(ApiException.class, (exception, req, res) -> {
+            ApiException err = exception;
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("status", err.getStatusCode());
+            jsonMap.put("errorMessage", err.getMessage());
+            res.type("application/json");
+            res.status(err.getStatusCode());
+            res.body(gson.toJson(jsonMap));
+        });
+
 
     }
 }
