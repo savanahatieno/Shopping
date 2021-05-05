@@ -86,7 +86,13 @@ public class Sql2oItemsDao implements ItemsDao {
             System.out.println(ex);
         }
     }
-
+    public Items findById(int id) {
+        try(Connection con = sql2o.open()){
+            return con.createQuery("SELECT * FROM items WHERE id = :id")
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Items.class);
+        }
+    }
     @Override
     public void clearAll() {
         String sql = "DELETE from items";
@@ -96,4 +102,5 @@ public class Sql2oItemsDao implements ItemsDao {
             System.out.println(ex);
         }
     }
+
 }
