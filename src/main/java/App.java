@@ -44,6 +44,7 @@ public class App {
             return gson.toJson(item);
         });
 
+        //READ
         get("/stores", "application/json", (req, res) -> {
             if(storeDao.getAll().size() > 0){
                 return gson.toJson(storeDao.getAll());
@@ -94,6 +95,14 @@ public class App {
             }
         });
 
+        get("/items", "application/json", (req, res) -> {
+            if(itemDao.getAll().size() > 0){
+                return gson.toJson(itemDao.getAll());
+            }
+            else {
+                return "{\"message\":\"I'm sorry, but no stores are currently listed in the database.\"}";
+            }
+        });
 
         get("/items/:id", "application/json", (req, res) -> {
             int itemId = Integer.parseInt(req.params("id"));
@@ -116,6 +125,16 @@ public class App {
                 return gson.toJson(itemDao.getAllStoresForItem(itemId));
             }
         });
+        get("/items/:name", "application/json", (req, res) -> {
+            String itemName = req.params("name");
+            Items itemsToFind = itemDao.findByName(itemName);
+            if (itemsToFind == null){
+                throw new ApiException(404, String.format("No items with the name: \"%s\" exists", req.params("name")));
+            }else {
+                return gson.toJson(itemName);
+            }
+        });
+
 
         exception(ApiException.class, (exception, req, res) -> {
             ApiException err = exception;
