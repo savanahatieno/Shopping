@@ -1,2 +1,2 @@
-DROP DATABASE pricecomparison_test;
-DROP DATABASE pricecomparison;
+DROP DATABASE shopping_test;
+DROP DATABASE shopping;
