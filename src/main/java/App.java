@@ -61,6 +61,19 @@ public class App {
                 throw new ApiException(404, String.format("Store or Item does not exist"));
             }
         });
+        get("/stores/:storeId/items", "application/json", (req, res) -> {
+            int storeId = Integer.parseInt(req.params("storeId"));
+            Store storeToFind = storeDao.findById(storeId);
+            if (storeToFind == null){
+                throw new ApiException(404, String.format("No store with the id: \"%s\" exists", req.params("id")));
+            }
+            else if (storeDao.getAllItemsByStore(storeId).size()==0){
+                return "{\"message\":\"I'm sorry, but no items are listed for this store.\"}";
+            }
+            else {
+                return gson.toJson(storeDao.getAllItemsByStore(storeId));
+            }
+        });
 
         exception(ApiException.class, (exception, req, res) -> {
             ApiException err = exception;
