@@ -74,6 +74,14 @@ public class App {
             }
 
         });
+        get("/stores/:id", "application/json", (req, res) -> {
+            int storeId = Integer.parseInt(req.params("id"));
+            Store storeToFind = storeDao.findById(storeId);
+            if (storeToFind == null){
+                throw new ApiException(404, String.format("No stores with the id: \"%s\" exists", req.params("id")));
+            }
+            return gson.toJson(storeToFind);
+        });
         get("/stores/:storeId/items", "application/json", (req, res) -> {
             int storeId = Integer.parseInt(req.params("storeId"));
             Store storeToFind = storeDao.findById(storeId);
