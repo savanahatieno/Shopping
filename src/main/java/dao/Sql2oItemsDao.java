@@ -89,7 +89,7 @@ public class Sql2oItemsDao implements ItemsDao {
     @Override
     public Items findById(int id) {
         try(Connection con = sql2o.open()){
-            return con.createQuery("SELECT * FROM items WHERE id = :id")
+            return con.createQuery("SELECT * FROM items WHERE id=:id")
                     .addParameter("id", id)
                     .executeAndFetchFirst(Items.class);
         }
