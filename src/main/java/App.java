@@ -44,6 +44,24 @@ public class App {
             return gson.toJson(item);
         });
 
+        post("/stores/:storeId/items/:itemId", "application/json", (req, res) -> {
+            int storeId = Integer.parseInt(req.params("storeId"));
+            int itemId = Integer.parseInt(req.params("itemId"));
+            Store store = storeDao.findById(storeId);
+            Items item = itemDao.findById(itemId);
+
+
+            if (store != null && item != null){
+                //both exist and can be associated
+                itemDao.addItemToStore(item, store);
+                res.status(201);
+                return gson.toJson(String.format("Store '%s' and Item '%s' have been associated",item.getName(), store.getName()));
+            }
+            else {
+                throw new ApiException(404, String.format("Store or Item does not exist"));
+            }
+        });
+
 
     }
 }
