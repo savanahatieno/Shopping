@@ -74,6 +74,19 @@ public class App {
                 return gson.toJson(storeDao.getAllItemsByStore(storeId));
             }
         });
+        get("/items/:id/stores", "application/json", (req, res) -> {
+            int itemId = Integer.parseInt(req.params("id"));
+            Items itemToFind = itemDao.findById(itemId);
+            if (itemToFind == null){
+                throw new ApiException(404, String.format("No items with the id: \"%s\" exists", req.params("id")));
+            }
+            else if (itemDao.getAllStoresForItem(itemId).size()==0){
+                return "{\"message\":\"I'm sorry, but no restaurants are listed for this item.\"}";
+            }
+            else {
+                return gson.toJson(itemDao.getAllStoresForItem(itemId));
+            }
+        });
 
         exception(ApiException.class, (exception, req, res) -> {
             ApiException err = exception;
